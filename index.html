@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ตารางการส่งรอบรถ</title>
+
+  <!-- Bootstrap (for modal) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FullCalendar -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --primary:#1f6fb2;         /* ฟ้าเข้ม */
+      --accent:#ff7a1a;          /* ส้ม */
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --border:#e6edf7;
+      --text:#0f172a;
+      --muted:#64748b;
+      --radius:18px;
+
+      /* status */
+      --confirmed-bg: rgba(31,111,178,.16);
+      --confirmed-bd: rgba(31,111,178,.38);
+      --confirmed-tx: #0b3a66;
+
+      --pending-bg: rgba(255,122,26,.16);
+      --pending-bd: rgba(255,122,26,.42);
+      --pending-tx: #8a3b00;
+    }
+
+    body{
+      font-family: "Prompt", system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(1000px 400px at 10% 0%, rgba(31,111,178,.08), transparent 60%),
+                  radial-gradient(800px 400px at 90% 10%, rgba(255,122,26,.08), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    .page-wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 14px 40px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .title{
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      margin: 0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .title .dot{
+      width:12px;height:12px;border-radius:999px;
+      background: linear-gradient(180deg, var(--accent), #ff9a55);
+      box-shadow: 0 8px 18px rgba(255,122,26,.25);
+    }
+
+    .hint{
+      color: var(--muted);
+      font-size: 14px;
+      margin: 6px 0 0;
+      font-weight: 600;
+    }
+
+    .card-shell{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, .08);
+      overflow: hidden;
+    }
+
+    .card-head{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .summary{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .badge-soft{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(31,111,178,.08);
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 13px;
+      border: 1px solid rgba(31,111,178,.16);
+    }
+    .badge-soft .pill{
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.06);
+      color: #0f172a;
+      border: 1px solid rgba(15,23,42,.10);
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .legend{
+      display:flex;
+      gap:8px;
+      flex-wrap: wrap;
+    }
+    .lg{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      border:1px solid transparent;
+      font-weight: 900;
+      font-size: 12px;
+      background:#fff;
+    }
+    .lg i{
+      width:10px;height:10px;border-radius:999px; display:inline-block;
+    }
+    .lg.confirmed{ border-color: var(--confirmed-bd); color: var(--confirmed-tx); }
+    .lg.confirmed i{ background: var(--primary); }
+    .lg.pending{ border-color: var(--pending-bd); color: var(--pending-tx); }
+    .lg.pending i{ background: var(--accent); }
+
+    .filters{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .filters select, .filters input{
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      min-width: 190px;
+      outline: none;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(15,23,42,.04);
+    }
+    .filters input::placeholder{ color: #94a3b8; font-weight: 700; }
+
+    .btn-accent{
+      background: linear-gradient(180deg, #ff7a1a, #ff8f3d);
+      border: none;
+      color: #fff;
+      font-weight: 900;
+      border-radius: 14px;
+      padding: 10px 14px;
+      box-shadow: 0 10px 18px rgba(255,122,26,.18);
+    }
+    .btn-accent:hover{ opacity: .94; }
+
+    .btn-ghost{
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 900;
+      border-radius: 14px;
+      padding: 10px 14px;
+    }
+
+    .calendar-wrap{
+      padding: 14px;
+    }
+
+    /* =========================
+       FullCalendar - NEW UI
+    ========================= */
+    .fc{
+      --fc-border-color: transparent; /* ลดเส้นตารางแข็งๆ */
+    }
+
+    /* Toolbar */
+    .fc .fc-toolbar{
+      padding: 10px 6px 6px;
+    }
+    .fc .fc-toolbar-title{
+      font-size: 18px;
+      font-weight: 1000;
+      color: var(--text);
+      letter-spacing: .2px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.04);
+      border: 1px solid rgba(15,23,42,.06);
+    }
+    .fc .fc-button{
+      border-radius: 14px !important;
+      border: 1px solid var(--border) !important;
+      background: #fff !important;
+      color: var(--text) !important;
+      font-weight: 900 !important;
+      padding: 8px 10px !important;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, .05) !important;
+    }
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active{
+      background: rgba(31,111,178,.10) !important;
+      border-color: rgba(31,111,178,.25) !important;
+      color: var(--primary) !important;
+    }
+
+    /* Day header (อา จ ...) */
+    .fc .fc-col-header-cell{
+      background: rgba(15,23,42,.02);
+      border: none !important;
+      padding: 8px 0;
+    }
+    .fc .fc-col-header-cell-cushion{
+      color: #334155;
+      font-weight: 900;
+      font-size: 12px;
+      text-transform: none;
+    }
+
+    /* Day cells as cards */
+    .fc .fc-daygrid-day{
+      background: transparent;
+      border: none !important;
+      padding: 6px;
+    }
+    .fc .fc-daygrid-day-frame{
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 22px rgba(15,23,42,.05);
+      overflow: hidden;
+      min-height: 120px;
+    }
+
+    /* date number pill */
+    .fc .fc-daygrid-day-top{
+      padding: 8px 10px 0;
+    }
+    .fc .fc-daygrid-day-number{
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 1000;
+      color: #334155;
+      background: rgba(15,23,42,.04);
+      border: 1px solid rgba(15,23,42,.06);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    /* =========================
+       ✅ TODAY – ไฮไลท์แบบกรอบชัด ไม่จาง
+    ========================= */
+    .fc .fc-day-today{
+      background: transparent !important;
+    }
+    .fc .fc-day-today .fc-daygrid-day-frame{
+      border: 2px solid #ff7a1a !important;
+      box-shadow: 0 0 0 2px rgba(255,122,26,.15);
+      background: #ffffff !important;
+    }
+    .fc .fc-day-today .fc-daygrid-day-number{
+      background: #ff7a1a !important;
+      color: #ffffff !important;
+      border: none !important;
+      font-weight: 1000;
+    }
+    .fc .fc-day-today .fc-event{
+      opacity: 1 !important;
+    }
+
+    /* Events in day cell */
+    .fc .fc-daygrid-day-events{
+      margin: 6px 8px 10px;
+    }
+
+    .fc .fc-event{
+      border-radius: 12px;
+      border: 1px solid rgba(15,23,42,.10);
+      box-shadow: 0 8px 16px rgba(15, 23, 42, .06);
+      overflow: hidden;
+      opacity: 1 !important; /* ✅ กันจาง */
+    }
+    .fc .fc-event .fc-event-title{
+      font-weight: 900;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .fc .fc-event .fc-event-time{
+      font-weight: 1000;
+      font-size: 11px;
+      opacity: .9;
+    }
+
+    /* +more styling */
+    .fc .fc-daygrid-more-link{
+      display:inline-block;
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,.18);
+      background: rgba(15,23,42,.04);
+      font-weight: 1000;
+      font-size: 12px;
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .fc .fc-daygrid-more-link:hover{
+      background: rgba(31,111,178,.08);
+      border-color: rgba(31,111,178,.22);
+      color: var(--primary);
+    }
+
+    .fc .fc-popover{
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(15,23,42,.12);
+    }
+    .fc .fc-popover-header{
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      font-weight: 1000;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Modal detail */
+    .kv{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap: 10px 14px;
+      padding: 10px 0;
+    }
+    .kv .k{ color: var(--muted); font-weight: 800; }
+    .kv .v{ font-weight: 1000; }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 1000;
+      font-size: 13px;
+      border: 1px solid transparent;
+      background:#fff;
+    }
+    .chip-primary{
+      background: rgba(31,111,178,.10);
+      color: var(--primary);
+      border-color: rgba(31,111,178,.20);
+    }
+    .chip-accent{
+      background: rgba(255,122,26,.12);
+      color: #8a3b00;
+      border-color: rgba(255,122,26,.22);
+    }
+
+    .chip-confirmed{
+      background: var(--confirmed-bg);
+      border-color: rgba(31,111,178,.38);
+      color: #0b3a66;
+    }
+    .chip-pending{
+      background: var(--pending-bg);
+      border-color: rgba(255,122,26,.42);
+      color: #8a3b00;
+    }
+
+    /* =========================
+       ✅ DOT (จุด) เข้ม ชัด ไม่จาง + แยกสีตามสถานะ
+       - month/dayGrid แบบ list จะมี "dot" อัตโนมัติ
+       - เราทำให้หนา + สีชัด
+    ========================= */
+    .fc .fc-daygrid-event-dot{
+      border-width: 6px !important;  /* ✅ ทำให้จุดอ้วนขึ้น */
+      opacity: 1 !important;         /* ✅ ไม่จาง */
+      margin-top: 2px !important;
+    }
+
+    /* confirmed = ฟ้า */
+    .fc .confirmed-dot .fc-daygrid-event-dot{
+      border-color: var(--primary) !important;
+    }
+
+    /* pending = ส้ม */
+    .fc .pending-dot .fc-daygrid-event-dot{
+      border-color: var(--accent) !important;
+    }
+
+    @media (max-width: 576px){
+      .title{ font-size: 22px; }
+      .kv{ grid-template-columns: 1fr; }
+      .filters select, .filters input{ min-width: 100%; }
+      .calendar-wrap{ padding: 10px; }
+      .fc .fc-toolbar-title{ width: 100%; text-align:center; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <div class="topbar">
+      <div>
+        <h1 class="title"><span class="dot"></span>ตารางการส่งรอบรถ</h1>
+        <p class="hint">กดที่รายการในปฏิทินเพื่อดูรายละเอียด (เลขรถ / เลขกล่อง / สถานะยืนยันงาน)</p>
+      </div>
+    </div>
+
+    <div class="card-shell">
+      <div class="card-head">
+        <div class="summary">
+          <div class="badge-soft">
+            <span>ทั้งหมด</span>
+            <span class="pill" id="countAll">0 รายการ</span>
+          </div>
+
+          <div class="legend">
+            <span class="lg confirmed"><i></i>ยืนยันแล้ว</span>
+            <span class="lg pending"><i></i>ยังไม่ยืนยัน</span>
+          </div>
+        </div>
+
+        <div class="filters">
+          <input id="searchText" type="text" placeholder="ค้นหา: เลขรถ / เลขกล่อง" />
+          <select id="filterStatus">
+            <option value="">สถานะทั้งหมด</option>
+            <option value="confirmed">ยืนยันงานแล้ว</option>
+            <option value="pending">รอยืนยัน</option>
+          </select>
+          <button class="btn-accent" id="btnApply">ค้นหา</button>
+          <button class="btn-ghost" id="btnReset">รีเซต</button>
+        </div>
+      </div>
+
+      <div class="calendar-wrap">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:18px; overflow:hidden;">
+        <div class="modal-header" style="background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%); border-bottom:1px solid #eef3fb;">
+          <div>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+              <span class="chip chip-primary" id="modalTruck">เลขรถ: -</span>
+              <span class="chip chip-accent" id="modalBox">เลขกล่อง: -</span>
+            </div>
+            <div class="mt-2">
+              <span class="chip chip-confirmed" id="modalStatus">สถานะ: -</span>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="kv">
+            <div class="k">วัน / เวลา</div>
+            <div class="v" id="modalDate">-</div>
+
+            <div class="k">หัวข้อ</div>
+            <div class="v" id="modalTitle">-</div>
+
+            <div class="k">รายละเอียด</div>
+            <div class="v" id="modalNote">-</div>
+          </div>
+
+          <div class="alert alert-light mt-3" style="border-radius:14px; border:1px solid #eef3fb;">
+            <div class="fw-bold">ทิป</div>
+            <div class="text-secondary" style="font-size:14px;">
+              สามารถเชื่อมข้อมูลจริงจาก API ได้ โดยแทนที่ array <code>RAW_EVENTS</code> ในไฟล์นี้
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="border-top:1px solid #eef3fb;">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius:12px; font-weight:900;">ปิด</button>
+          <button type="button" class="btn btn-primary" style="border-radius:12px; font-weight:1000;" id="btnConfirmMock">
+            Confirm (ตัวอย่าง)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+  <script>
+    // ✅ ตัวอย่างข้อมูล
+    const RAW_EVENTS = [
+      {
+        id: "1",
+        title: "LPE (LPE200) - 6838369 ↔ 2510002",
+        start: "2026-01-21T09:00:00",
+        end:   "2026-01-21T10:00:00",
+        extendedProps: {
+          truckNo: "LPE (LPE200) - 6838369",
+          boxNo: "2510002",
+          status: "confirmed",
+          note: "งานแมชชิ่งกล่องกับรถยก: ตรวจสอบการเชื่อมต่อแล้ว"
+        }
+      },
+      {
+        id: "2",
+        title: "LHE (LHE150) - 301292 ↔ 2510001",
+        start: "2026-01-22T13:30:00",
+        end:   "2026-01-22T14:15:00",
+        extendedProps: {
+          truckNo: "LHE (LHE150) - 301292",
+          boxNo: "2510001",
+          status: "pending",
+          note: "รอช่างยืนยันงานหลังติดตั้ง"
+        }
+      },
+      {
+        id: "3",
+        title: "LHE (LHE150) - 20210503830 ↔ 2510014",
+        start: "2026-01-23T10:00:00",
+        end:   "2026-01-23T10:45:00",
+        extendedProps: {
+          truckNo: "LHE (LHE150) - 20210503830",
+          boxNo: "2510014",
+          status: "confirmed",
+          note: "ยืนยันงานแล้ว: สถานะ Connect/Standby ปกติ"
+        }
+      },
+      {
+        id: "4",
+        title: "LPE (LPE200) - 6687893 ↔ 2510015",
+        start: "2026-01-24T15:00:00",
+        end:   "2026-01-24T16:00:00",
+        extendedProps: {
+          truckNo: "LPE (LPE200) - 6687893",
+          boxNo: "2510015",
+          status: "pending",
+          note: "นัดทดสอบการทำงานรอบสุดท้าย"
+        }
+      },
+    ];
+
+    // Helpers
+    const statusLabel = (s) => s === "confirmed" ? "ยืนยันงานแล้ว" : "รอยืนยัน";
+    const statusClass = (s) => s === "confirmed" ? "chip-confirmed" : "chip-pending";
+
+    function buildCalendarEvents(list){
+      // ✅ เพิ่ม classNames เพื่อคุมสี dot ตามสถานะ + กันจาง
+      return list.map(e => {
+        const isConfirmed = e.extendedProps?.status === "confirmed";
+        return {
+          ...e,
+          classNames: [isConfirmed ? "confirmed-dot" : "pending-dot"], // ✅ สำคัญ: ทำให้ dot แยกสีได้
+          backgroundColor: isConfirmed ? "rgba(31,111,178,.18)" : "rgba(255,122,26,.18)",
+          borderColor:     isConfirmed ? "rgba(31,111,178,.40)" : "rgba(255,122,26,.45)",
+          textColor: "#0f172a"
+        };
+      });
+    }
+
+    function applyFilter(){
+      const q = (document.getElementById("searchText").value || "").trim().toLowerCase();
+      const st = document.getElementById("filterStatus").value;
+
+      const filtered = RAW_EVENTS.filter(e => {
+        const truck = (e.extendedProps?.truckNo || "").toLowerCase();
+        const box = (e.extendedProps?.boxNo || "").toLowerCase();
+        const title = (e.title || "").toLowerCase();
+        const status = e.extendedProps?.status || "";
+
+        const matchQ = !q || truck.includes(q) || box.includes(q) || title.includes(q);
+        const matchS = !st || status === st;
+
+        return matchQ && matchS;
+      });
+
+      document.getElementById("countAll").textContent = `${filtered.length} รายการ`;
+      return filtered;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const calEl = document.getElementById("calendar");
+      const modalEl = document.getElementById("detailModal");
+      const modal = new bootstrap.Modal(modalEl);
+
+      document.getElementById("countAll").textContent = `${RAW_EVENTS.length} รายการ`;
+
+      const calendar = new FullCalendar.Calendar(calEl, {
+        initialView: "dayGridMonth",
+        height: "auto",
+        locale: "th",
+        firstDay: 1,
+        nowIndicator: true,
+        dayMaxEvents: 2,
+        fixedWeekCount: false,
+
+        // ✅ เอาช่อง all-day ออก (ใน week/day)
+        allDaySlot: false,
+
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay"
+        },
+        buttonText: {
+          today: "วันนี้",
+          month: "เดือน",
+          week: "สัปดาห์",
+          day: "วัน"
+        },
+
+        events: buildCalendarEvents(RAW_EVENTS),
+
+        eventClick: function(info){
+          const e = info.event;
+          const p = e.extendedProps || {};
+          const start = e.start;
+          const end = e.end;
+
+          const dateText = (() => {
+            const opt = { year:"numeric", month:"long", day:"numeric", hour:"2-digit", minute:"2-digit" };
+            const s = start ? start.toLocaleString("th-TH", opt) : "-";
+            const en = end ? end.toLocaleString("th-TH", opt) : "";
+            return en ? `${s} - ${en}` : s;
+          })();
+
+          document.getElementById("modalTruck").textContent = `เลขรถ: ${p.truckNo || "-"}`;
+          document.getElementById("modalBox").textContent = `เลขกล่อง: ${p.boxNo || "-"}`;
+          document.getElementById("modalStatus").textContent = `สถานะ: ${statusLabel(p.status)}`;
+          document.getElementById("modalStatus").className = `chip ${statusClass(p.status)}`;
+
+          document.getElementById("modalDate").textContent = dateText;
+          document.getElementById("modalTitle").textContent = e.title || "-";
+          document.getElementById("modalNote").textContent = p.note || "-";
+
+          const btn = document.getElementById("btnConfirmMock");
+          btn.disabled = (p.status === "confirmed");
+          btn.textContent = (p.status === "confirmed") ? "ยืนยันแล้ว" : "Confirm";
+
+          btn.onclick = () => {
+            alert("ตัวอย่าง: กด Confirm แล้ว (ของจริงให้เรียก API เพื่ออัปเดตสถานะ)");
+          };
+
+          modal.show();
+        }
+      });
+
+      calendar.render();
+
+      document.getElementById("btnApply").addEventListener("click", () => {
+        const filtered = applyFilter();
+        calendar.removeAllEvents();
+        calendar.addEventSource(buildCalendarEvents(filtered));
+      });
+
+      document.getElementById("btnReset").addEventListener("click", () => {
+        document.getElementById("searchText").value = "";
+        document.getElementById("filterStatus").value = "";
+        document.getElementById("countAll").textContent = `${RAW_EVENTS.length} รายการ`;
+        calendar.removeAllEvents();
+        calendar.addEventSource(buildCalendarEvents(RAW_EVENTS));
+      });
+    });
+  </script>
+</body>
+</html>
