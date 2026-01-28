@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ตารางการส่งรอบรถ</title>
+  <title>ตารางการส่งรถยก</title>
 
   <!-- Bootstrap (for modal) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <!-- FullCalendar -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
 
   <style>
     :root{
-      --primary:#1f6fb2;         /* ฟ้าเข้ม */
-      --accent:#ff7a1a;          /* ส้ม */
+      --primary:#1f6fb2;
+      --accent:#ff7a1a;
       --bg:#f5f7fb;
       --card:#ffffff;
       --border:#e6edf7;
@@ -22,7 +23,6 @@
       --muted:#64748b;
       --radius:18px;
 
-      /* status */
       --confirmed-bg: rgba(31,111,178,.16);
       --confirmed-bd: rgba(31,111,178,.38);
       --confirmed-tx: #0b3a66;
@@ -189,21 +189,11 @@
       padding: 10px 14px;
     }
 
-    .calendar-wrap{
-      padding: 14px;
-    }
+    .calendar-wrap{ padding: 14px; }
 
-    /* =========================
-       FullCalendar - NEW UI
-    ========================= */
-    .fc{
-      --fc-border-color: transparent; /* ลดเส้นตารางแข็งๆ */
-    }
+    .fc{ --fc-border-color: transparent; }
 
-    /* Toolbar */
-    .fc .fc-toolbar{
-      padding: 10px 6px 6px;
-    }
+    .fc .fc-toolbar{ padding: 10px 6px 6px; }
     .fc .fc-toolbar-title{
       font-size: 18px;
       font-weight: 1000;
@@ -230,7 +220,6 @@
       color: var(--primary) !important;
     }
 
-    /* Day header (อา จ ...) */
     .fc .fc-col-header-cell{
       background: rgba(15,23,42,.02);
       border: none !important;
@@ -240,10 +229,8 @@
       color: #334155;
       font-weight: 900;
       font-size: 12px;
-      text-transform: none;
     }
 
-    /* Day cells as cards */
     .fc .fc-daygrid-day{
       background: transparent;
       border: none !important;
@@ -258,13 +245,9 @@
       min-height: 120px;
     }
 
-    /* date number pill */
-    .fc .fc-daygrid-day-top{
-      padding: 8px 10px 0;
-    }
+    .fc .fc-daygrid-day-top{ padding: 8px 10px 0; }
     .fc .fc-daygrid-day-number{
-      width: 28px;
-      height: 28px;
+      width: 28px; height: 28px;
       border-radius: 999px;
       display: inline-flex;
       align-items:center;
@@ -277,12 +260,7 @@
       font-size: 12px;
     }
 
-    /* =========================
-       ✅ TODAY – ไฮไลท์แบบกรอบชัด ไม่จาง
-    ========================= */
-    .fc .fc-day-today{
-      background: transparent !important;
-    }
+    .fc .fc-day-today{ background: transparent !important; }
     .fc .fc-day-today .fc-daygrid-day-frame{
       border: 2px solid #ff7a1a !important;
       box-shadow: 0 0 0 2px rgba(255,122,26,.15);
@@ -294,51 +272,24 @@
       border: none !important;
       font-weight: 1000;
     }
-    .fc .fc-day-today .fc-event{
-      opacity: 1 !important;
-    }
 
-    /* Events in day cell */
-    .fc .fc-daygrid-day-events{
-      margin: 6px 8px 10px;
-    }
+    .fc .fc-daygrid-day-events{ margin: 6px 8px 10px; }
 
     .fc .fc-event{
       border-radius: 12px;
       border: 1px solid rgba(15,23,42,.10);
       box-shadow: 0 8px 16px rgba(15, 23, 42, .06);
       overflow: hidden;
-      opacity: 1 !important; /* ✅ กันจาง */
+      opacity: 1 !important;
     }
-    .fc .fc-event .fc-event-title{
-      font-weight: 900;
-      font-size: 12px;
-      line-height: 1.25;
-    }
-    .fc .fc-event .fc-event-time{
-      font-weight: 1000;
-      font-size: 11px;
-      opacity: .9;
-    }
+    .fc .fc-event .fc-event-title{ font-weight: 900; font-size: 12px; line-height: 1.25; }
+    .fc .fc-event .fc-event-time{ font-weight: 1000; font-size: 11px; opacity: .9; }
 
-    /* +more styling */
-    .fc .fc-daygrid-more-link{
-      display:inline-block;
-      margin-top: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(15,23,42,.18);
-      background: rgba(15,23,42,.04);
-      font-weight: 1000;
-      font-size: 12px;
-      color: #0f172a;
-      text-decoration: none;
-    }
-    .fc .fc-daygrid-more-link:hover{
-      background: rgba(31,111,178,.08);
-      border-color: rgba(31,111,178,.22);
-      color: var(--primary);
-    }
+    /* HIDE EVENT TIME */
+    .fc .fc-event-time{ display:none !important; }
+
+
+    
 
     .fc .fc-popover{
       border-radius: 16px;
@@ -355,12 +306,13 @@
     /* Modal detail */
     .kv{
       display:grid;
-      grid-template-columns: 140px 1fr;
+      grid-template-columns: 180px 1fr;
       gap: 10px 14px;
       padding: 10px 0;
     }
     .kv .k{ color: var(--muted); font-weight: 800; }
     .kv .v{ font-weight: 1000; }
+    .kv .v a{ font-weight: 1000; }
 
     .chip{
       display:inline-flex;
@@ -395,25 +347,46 @@
       color: #8a3b00;
     }
 
-    /* =========================
-       ✅ DOT (จุด) เข้ม ชัด ไม่จาง + แยกสีตามสถานะ
-       - month/dayGrid แบบ list จะมี "dot" อัตโนมัติ
-       - เราทำให้หนา + สีชัด
-    ========================= */
     .fc .fc-daygrid-event-dot{
-      border-width: 6px !important;  /* ✅ ทำให้จุดอ้วนขึ้น */
-      opacity: 1 !important;         /* ✅ ไม่จาง */
+      border-width: 6px !important;
+      opacity: 1 !important;
       margin-top: 2px !important;
     }
+    .fc .confirmed-dot .fc-daygrid-event-dot{ border-color: var(--primary) !important; }
+    .fc .pending-dot .fc-daygrid-event-dot{ border-color: var(--accent) !important; }
 
-    /* confirmed = ฟ้า */
-    .fc .confirmed-dot .fc-daygrid-event-dot{
-      border-color: var(--primary) !important;
+    /* Google-like event bar */
+    .fc .fc-daygrid-event{ margin: 4px 0 !important; }
+    .fc .fc-event{ padding: 0 !important; cursor: pointer; pointer-events: auto; }
+    .fc .ev-pill{
+      display:block;
+      width:100%;
+      padding: 6px 10px;
+      font-weight: 1000;
+      font-size: 12px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-
-    /* pending = ส้ม */
-    .fc .pending-dot .fc-daygrid-event-dot{
-      border-color: var(--accent) !important;
+    /* more link style */
+    .fc .fc-daygrid-more-link{
+      display:block;
+      width:100%;
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(15,23,42,.16);
+      background: rgba(15,23,42,.04);
+      font-weight: 1000;
+      font-size: 12px;
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .fc .fc-daygrid-more-link:hover{
+      background: rgba(31,111,178,.08);
+      border-color: rgba(31,111,178,.22);
+      color: var(--primary);
     }
 
     @media (max-width: 576px){
@@ -423,6 +396,95 @@
       .calendar-wrap{ padding: 10px; }
       .fc .fc-toolbar-title{ width: 100%; text-align:center; }
     }
+
+    /* ================================
+       FIX: 3 แถวพอดี (2 event + more)
+       ไม่ล้นกรอบ + ระยะห่างสวย
+       ================================ */
+    .fc .fc-daygrid-day-frame{
+      height: 150px;
+      min-height: 150px;
+    }
+
+    .fc .fc-daygrid-day-events{
+      margin: 6px 8px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 96px; /* 3 rows */
+      overflow: hidden;
+    }
+
+    .fc .fc-daygrid-day-events .fc-event{
+      width: 100%;
+    }
+
+    .fc .ev-pill,
+    .fc .fc-daygrid-more-link{
+      height: 28px;
+      min-height: 28px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    /* สีตามตัวอย่าง */
+    .fc .fc-event.confirmed-dot .ev-pill{
+      background: #dbeafe;   /* ฟ้าอ่อน */
+      border: 1px solid #93c5fd;
+    }
+
+    .fc .fc-event.pending-dot .ev-pill{
+      background: #ffedd5;   /* ส้มอ่อน */
+      border: 1px solid #fdba74;
+    }
+
+    .fc .fc-daygrid-more-link{
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+
+    /* ✅ Stack แบบรูป: โชว์ได้สูงสุด 3 แถว (ถ้าเกิน แถวสุดท้ายเป็น more) */
+    .fc .fc-daygrid-day-frame{
+      height: 150px !important;
+      min-height: 150px !important;
+    }
+
+    /* ลดระยะห่างให้พอดีกรอบ */
+    .fc .fc-daygrid-day-events{
+      margin: 6px 8px 8px !important;
+    }
+    .fc .fc-daygrid-event-harness{
+      margin: 4px 0 !important;
+    }
+
+    /* event bar + more link ให้สูงเท่ากัน */
+    .fc .ev-pill,
+    .fc .fc-daygrid-more-link{
+      height: 28px !important;
+      min-height: 28px !important;
+      padding: 0 12px !important;
+      border-radius: 999px !important;
+      display:flex !important;
+      align-items:center !important;
+      font-size: 12.5px !important;
+      font-weight: 900 !important;
+      color: #0f172a !important;
+    }
+
+    /* ปรับ more ให้เป็นแถบเหมือนรายการ */
+    .fc .fc-daygrid-more-link{
+      margin-top: 4px !important;
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      text-decoration: none !important;
+    }
+
   </style>
 </head>
 
@@ -430,8 +492,8 @@
   <div class="page-wrap">
     <div class="topbar">
       <div>
-        <h1 class="title"><span class="dot"></span>ตารางการส่งรอบรถ</h1>
-        <p class="hint">กดที่รายการในปฏิทินเพื่อดูรายละเอียด (เลขรถ / เลขกล่อง / สถานะยืนยันงาน)</p>
+        <h1 class="title"><span class="dot"></span>ตารางการส่งรถยก</h1>
+        <p class="hint">กดที่รายการในปฏิทินเพื่อดูรายละเอียด</p>
       </div>
     </div>
 
@@ -450,7 +512,7 @@
         </div>
 
         <div class="filters">
-          <input id="searchText" type="text" placeholder="ค้นหา: เลขรถ / เลขกล่อง" />
+          <input id="searchText" type="text" placeholder="ค้นหา: บริษัท / ผู้ติดต่อ / รถยก" />
           <select id="filterStatus">
             <option value="">สถานะทั้งหมด</option>
             <option value="confirmed">ยืนยันงานแล้ว</option>
@@ -474,8 +536,9 @@
         <div class="modal-header" style="background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%); border-bottom:1px solid #eef3fb;">
           <div>
             <div class="d-flex align-items-center gap-2 flex-wrap">
-              <span class="chip chip-primary" id="modalTruck">เลขรถ: -</span>
-              <span class="chip chip-accent" id="modalBox">เลขกล่อง: -</span>
+              <span class="chip chip-primary" id="modalDeliveryNo"><i class="bi bi-receipt"></i> เลขใบจัดส่ง: -</span>
+              <span class="chip chip-primary" id="modalCompany"><i class="bi bi-building"></i> ชื่อบริษัท: -</span>
+              <span class="chip chip-accent" id="modalContact"><i class="bi bi-person"></i> ผู้ติดต่อ: -</span>
             </div>
             <div class="mt-2">
               <span class="chip chip-confirmed" id="modalStatus">สถานะ: -</span>
@@ -486,20 +549,23 @@
 
         <div class="modal-body">
           <div class="kv">
-            <div class="k">วัน / เวลา</div>
-            <div class="v" id="modalDate">-</div>
+            <div class="k"><i class="bi bi-calendar-event me-2"></i>วันที่จัดส่งรถยก</div>
+            <div class="v" id="modalDeliveryDate">-</div>
 
-            <div class="k">หัวข้อ</div>
-            <div class="v" id="modalTitle">-</div>
+            <div class="k"><i class="bi bi-truck me-2"></i>รายการรถยกที่จัดส่ง</div>
+            <div class="v" id="modalForklifts">-</div>
 
-            <div class="k">รายละเอียด</div>
-            <div class="v" id="modalNote">-</div>
+            <div class="k"><i class="bi bi-telephone me-2"></i>ข้อมูลการติดต่อผู้รับสินค้า</div>
+            <div class="v" id="modalReceiver">-</div>
+
+            <div class="k"><i class="bi bi-geo-alt me-2"></i>Link Google Map</div>
+            <div class="v" id="modalMap">-</div>
           </div>
 
-          <div class="alert alert-light mt-3" style="border-radius:14px; border:1px solid #eef3fb;">
+          <div class="alert alert-light mt-3" alert-light mt-3" style="border-radius:14px; border:1px solid #eef3fb;">
             <div class="fw-bold">ทิป</div>
             <div class="text-secondary" style="font-size:14px;">
-              สามารถเชื่อมข้อมูลจริงจาก API ได้ โดยแทนที่ array <code>RAW_EVENTS</code> ในไฟล์นี้
+              เชื่อมข้อมูลจริงจาก API ได้ โดยแทนที่ array <code>RAW_EVENTS</code> ให้เป็นข้อมูลจาก backend
             </div>
           </div>
         </div>
@@ -519,71 +585,76 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
   <script>
-    // ✅ ตัวอย่างข้อมูล
+    // ✅ ตัวอย่างข้อมูลใหม่ (ตามฟิลด์ที่คุณต้องการ)
+    function formatDeliveryNo(year, running) {
+      return `DO${year}-${String(running).padStart(4, "0")}`;
+    }
+
     const RAW_EVENTS = [
-      {
-        id: "1",
-        title: "LPE (LPE200) - 6838369 ↔ 2510002",
-        start: "2026-01-21T09:00:00",
-        end:   "2026-01-21T10:00:00",
+      // ✅ จำลอง: วันเดียวมีหลายรายการ (ให้ขึ้น 3 แถว + More)
+      ...Array.from({ length: 9 }).map((_, i) => ({
+        id: String(100 + i),
+        title: `Demo Co. (ส่ง 1 คัน)`,
+        start: "2026-01-21",
+        end:   "2026-01-21",
         extendedProps: {
-          truckNo: "LPE (LPE200) - 6838369",
-          boxNo: "2510002",
-          status: "confirmed",
-          note: "งานแมชชิ่งกล่องกับรถยก: ตรวจสอบการเชื่อมต่อแล้ว"
+          deliveryNo: formatDeliveryNo(2026, 1 + i),
+          companyName: "Demo Company",
+          contactName: "คุณทดสอบ 08x-xxx-xxxx",
+          forklifts: "LPE - 66xxxxxx",
+          deliveryDate: "21 มกราคม 2569",
+          receiverContact: "คุณรับของ 09x-xxx-xxxx",
+          mapLink: "https://maps.google.com/?q=13.7563,100.5018",
+          status: (i % 2 === 0) ? "confirmed" : "pending"
         }
-      },
+      })),
+
+      // วันอื่นๆ
       {
         id: "2",
-        title: "LHE (LHE150) - 301292 ↔ 2510001",
-        start: "2026-01-22T13:30:00",
-        end:   "2026-01-22T14:15:00",
+        title: "Bangkok Logistic (ส่ง 1 คัน)",
+        start: "2026-01-22",
+        end:   "2026-01-22",
         extendedProps: {
-          truckNo: "LHE (LHE150) - 301292",
-          boxNo: "2510001",
-          status: "pending",
-          note: "รอช่างยืนยันงานหลังติดตั้ง"
+          deliveryNo: formatDeliveryNo(2026, 20),
+          companyName: "Bangkok Logistic",
+          contactName: "คุณนภา 08x-xxx-xxxx",
+          forklifts: "LPE - 6687893",
+          deliveryDate: "22 มกราคม 2569",
+          receiverContact: "คุณธนา 09x-xxx-xxxx / ประตูโหลดของ",
+          mapLink: "https://maps.google.com/?q=13.7200,100.5000",
+          status: "pending"
         }
       },
       {
         id: "3",
-        title: "LHE (LHE150) - 20210503830 ↔ 2510014",
-        start: "2026-01-23T10:00:00",
-        end:   "2026-01-23T10:45:00",
+        title: "Siam Warehouse (ส่ง 3 คัน)",
+        start: "2026-01-23",
+        end:   "2026-01-23",
         extendedProps: {
-          truckNo: "LHE (LHE150) - 20210503830",
-          boxNo: "2510014",
-          status: "confirmed",
-          note: "ยืนยันงานแล้ว: สถานะ Connect/Standby ปกติ"
+          deliveryNo: formatDeliveryNo(2026, 21),
+          companyName: "Siam Warehouse",
+          contactName: "คุณเอ 08x-xxx-xxxx",
+          forklifts: "LHE - 20210503830, RRE - 8899001, LPE - 5566778",
+          deliveryDate: "23 มกราคม 2569",
+          receiverContact: "คุณบี 09x-xxx-xxxx / จุดตรวจรับ 2",
+          mapLink: "https://maps.google.com/?q=13.7000,100.5200",
+          status: "confirmed"
         }
-      },
-      {
-        id: "4",
-        title: "LPE (LPE200) - 6687893 ↔ 2510015",
-        start: "2026-01-24T15:00:00",
-        end:   "2026-01-24T16:00:00",
-        extendedProps: {
-          truckNo: "LPE (LPE200) - 6687893",
-          boxNo: "2510015",
-          status: "pending",
-          note: "นัดทดสอบการทำงานรอบสุดท้าย"
-        }
-      },
+      }
     ];
 
-    // Helpers
     const statusLabel = (s) => s === "confirmed" ? "ยืนยันงานแล้ว" : "รอยืนยัน";
     const statusClass = (s) => s === "confirmed" ? "chip-confirmed" : "chip-pending";
 
     function buildCalendarEvents(list){
-      // ✅ เพิ่ม classNames เพื่อคุมสี dot ตามสถานะ + กันจาง
       return list.map(e => {
         const isConfirmed = e.extendedProps?.status === "confirmed";
         return {
           ...e,
-          classNames: [isConfirmed ? "confirmed-dot" : "pending-dot"], // ✅ สำคัญ: ทำให้ dot แยกสีได้
-          backgroundColor: isConfirmed ? "rgba(31,111,178,.18)" : "rgba(255,122,26,.18)",
-          borderColor:     isConfirmed ? "rgba(31,111,178,.40)" : "rgba(255,122,26,.45)",
+          classNames: [isConfirmed ? "confirmed-dot" : "pending-dot"],
+          backgroundColor: isConfirmed ? "rgba(31,111,178,.22)" : "rgba(255,122,26,.22)",
+          borderColor:     isConfirmed ? "rgba(31,111,178,.55)" : "rgba(255,122,26,.60)",
           textColor: "#0f172a"
         };
       });
@@ -594,14 +665,16 @@
       const st = document.getElementById("filterStatus").value;
 
       const filtered = RAW_EVENTS.filter(e => {
-        const truck = (e.extendedProps?.truckNo || "").toLowerCase();
-        const box = (e.extendedProps?.boxNo || "").toLowerCase();
+        const p = e.extendedProps || {};
+        const company = (p.companyName || "").toLowerCase();
+        const contact = (p.contactName || "").toLowerCase();
+        const forklifts = (p.forklifts || "").toLowerCase();
+        const receiver = (p.receiverContact || "").toLowerCase();
         const title = (e.title || "").toLowerCase();
-        const status = e.extendedProps?.status || "";
+        const status = p.status || "";
 
-        const matchQ = !q || truck.includes(q) || box.includes(q) || title.includes(q);
+        const matchQ = !q || company.includes(q) || contact.includes(q) || forklifts.includes(q) || receiver.includes(q) || title.includes(q);
         const matchS = !st || status === st;
-
         return matchQ && matchS;
       });
 
@@ -620,49 +693,64 @@
         initialView: "dayGridMonth",
         height: "auto",
         locale: "th",
+        displayEventTime: false, // ✅ ไม่แสดงเวลาในรายการ
+
         firstDay: 1,
         nowIndicator: true,
-        dayMaxEvents: 2,
-        fixedWeekCount: false,
-
-        // ✅ เอาช่อง all-day ออก (ใน week/day)
+        
+                dayMaxEventRows: 3,
+fixedWeekCount: false,
         allDaySlot: false,
 
         headerToolbar: {
           left: "prev,next today",
           center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay"
+          right: "dayGridMonth"
         },
-        buttonText: {
-          today: "วันนี้",
-          month: "เดือน",
-          week: "สัปดาห์",
-          day: "วัน"
-        },
+        buttonText: { today: "วันนี้", month: "เดือน", week: "สัปดาห์", day: "วัน" },
 
         events: buildCalendarEvents(RAW_EVENTS),
+
+        // ✅ แสดงรายการแบบคล้าย Google Calendar (ใช้เลขใบจัดส่งเป็นหลัก)
+        eventContent: function(arg){
+          const p = arg.event.extendedProps || {};
+          const text = p.deliveryNo ? `${p.deliveryNo}` : (arg.event.title || "");
+          const pill = document.createElement("div");
+          pill.className = "ev-pill";
+          pill.textContent = text;
+          return { domNodes: [pill] };
+        },
+
+        eventDidMount: function(info){
+          info.el.style.cursor = "pointer";
+          info.el.style.pointerEvents = "auto";
+        },
+
 
         eventClick: function(info){
           const e = info.event;
           const p = e.extendedProps || {};
-          const start = e.start;
-          const end = e.end;
 
-          const dateText = (() => {
-            const opt = { year:"numeric", month:"long", day:"numeric", hour:"2-digit", minute:"2-digit" };
-            const s = start ? start.toLocaleString("th-TH", opt) : "-";
-            const en = end ? end.toLocaleString("th-TH", opt) : "";
-            return en ? `${s} - ${en}` : s;
-          })();
-
-          document.getElementById("modalTruck").textContent = `เลขรถ: ${p.truckNo || "-"}`;
-          document.getElementById("modalBox").textContent = `เลขกล่อง: ${p.boxNo || "-"}`;
+          // header chips
+          document.getElementById("modalDeliveryNo").textContent = `เลขใบจัดส่ง: ${p.deliveryNo || "-"}`;
+          document.getElementById("modalCompany").textContent = `ชื่อบริษัท: ${p.companyName || "-"}`;
+          document.getElementById("modalContact").textContent = `ชื่อผู้ติดต่อ: ${p.contactName || "-"}`;
           document.getElementById("modalStatus").textContent = `สถานะ: ${statusLabel(p.status)}`;
           document.getElementById("modalStatus").className = `chip ${statusClass(p.status)}`;
 
-          document.getElementById("modalDate").textContent = dateText;
-          document.getElementById("modalTitle").textContent = e.title || "-";
-          document.getElementById("modalNote").textContent = p.note || "-";
+          // body fields
+          document.getElementById("modalDeliveryDate").textContent = p.deliveryDate || "-";
+          document.getElementById("modalForklifts").textContent = p.forklifts || "-";
+          document.getElementById("modalReceiver").textContent = p.receiverContact || "-";
+
+          const mapEl = document.getElementById("modalMap");
+          if (p.mapLink) {
+            mapEl.innerHTML = `<a href="${p.mapLink}" target="_blank" rel="noopener" class="text-decoration-none">
+              เปิดแผนที่ Google Map
+            </a>`;
+          } else {
+            mapEl.textContent = "-";
+          }
 
           const btn = document.getElementById("btnConfirmMock");
           btn.disabled = (p.status === "confirmed");
